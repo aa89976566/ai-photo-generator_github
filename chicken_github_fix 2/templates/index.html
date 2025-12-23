@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐔 進擊的手撕雞 - AI搞笑照片生成器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #FFF5E6 0%, #FFE4B5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        .header {
+            background: linear-gradient(135deg, #FF6B35, #FF8C42);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+        
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .header p { font-size: 1.1em; opacity: 0.95; }
+        
+        /* LINE 加好友區域 */
+        .line-gate {
+            background: linear-gradient(135deg, #00B900, #00D42A);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 185, 0, 0.3);
+        }
+        
+        .line-gate h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .line-gate p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        .line-benefit {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .benefit-item {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            margin: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+        }
+        
+        .benefit-item .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .benefit-item .text {
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+        
+        .line-add-btn {
+            display: inline-block;
+            background: white;
+            color: #00B900;
+            padding: 20px 60px;
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .line-add-btn:hover {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+        
+        .line-id-display {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 10px;
+            display: inline-block;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .already-friend {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+        }
+        
+        .already-friend a {
+            color: white;
+            text-decoration: underline;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        
+        .stat-number { font-size: 2em; font-weight: bold; color: #FF6B35; }
+        .stat-label { color: #666; font-size: 0.9em; margin-top: 5px; }
+        
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, #F0FDF4, #D1FAE5);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid #00B900;
+        }
+        
+        .welcome-banner h3 {
+            color: #00B900;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .form-group { margin-bottom: 25px; }
+        .form-group label { 
+            display: block; 
+            font-weight: 600; 
+            color: #333; 
+            margin-bottom: 8px; 
+            font-size: 1.05em;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #FFE4B5;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #FF6B35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        
+        .upload-area {
+            border: 3px dashed #FF6B35;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #FFF9F0;
+        }
+        
+        .upload-area:hover { background: #FFE4B5; transform: scale(1.02); }
+        .upload-icon { font-size: 3em; margin-bottom: 10px; }
+        
+        #photoInput { display: none; }
+        
+        .preview-container {
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .remove-image {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #EF4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .style-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .style-option {
+            border: 3px solid #FFE4B5;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            background: white;
+        }
+        
+        .style-option:hover { border-color: #FF6B35; transform: translateY(-3px); }
+        .style-option.selected { border-color: #FF6B35; background: linear-gradient(135deg, #FFF9F0, #FFE4B5); }
+        
+        .style-emoji { font-size: 2.5em; margin-bottom: 10px; }
+        .style-name { font-weight: bold; color: #333; font-size: 1.1em; }
+        .style-desc { font-size: 0.85em; color: #666; margin-top: 5px; }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #FF6B35, #FF8C42);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
+        }
+        
+        .generate-btn:hover:not(:disabled) { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+        }
+        .generate-btn:disabled { background: #CCC; cursor: not-allowed; }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #FFE4B5;
+            border-top-color: #FF6B35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .result-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .result-section h2 { text-align: center; color: #FF6B35; margin-bottom: 30px; }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .result-item { text-align: center; }
+        .result-item img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .result-item img:hover { transform: scale(1.05); }
+        .result-item h3 { margin-top: 10px; color: #333; }
+        
+        .share-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #F0FDF4, #D1FAE5);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .share-section h3 {
+            color: #00B900;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .share-btn {
+            padding: 12px 30px;
+            background: #00B900;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .share-btn:hover {
+            background: #00D42A;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            .line-gate h2 { font-size: 1.5em; }
+            .line-add-btn { font-size: 1.2em; padding: 15px 40px; }
+            .form-card { padding: 25px; }
+            .style-options { grid-template-columns: 1fr; }
+            .result-grid { grid-template-columns: 1fr; }
+            .benefit-item { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐔 進擊的手撕雞</h1>
+            <p>AI搞笑照片生成器 - 讓你的毛孩變網紅！</p>
+        </div>
+        
+        <!-- LINE 加好友門檻 -->
+        <div class="line-gate" id="lineGate">
+            <h2>💚 加入 LINE 好友即可免費使用</h2>
+            <p>
+                一鍵加好友，立即解鎖 AI 搞笑照片生成功能<br>
+                不需填寫任何資料，完全免費！
+            </p>
+            
+            <div class="line-benefit">
+                <div class="benefit-item">
+                    <div class="icon">✨</div>
+                    <div class="text">完全免費<br>無需付費</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="icon">🎨</div>
+                    <div class="text">4種風格<br>任你選擇</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="icon">🎁</div>
+                    <div class="text">獨家優惠<br>優先通知</div>
+                </div>
+            </div>
+            
+            <!-- 您的 LINE 官方帳號 -->
+            <a href="https://line.me/R/ti/p/@902rkfzv" target="_blank" class="line-add-btn" onclick="handleLineClick()">
+                📱 點擊加入 LINE 好友
+            </a>
+            
+            <div class="line-id-display">
+                LINE ID: @902rkfzv
+            </div>
+            
+            <div class="already-friend">
+                已經是好友了？<a onclick="skipToGenerate()">點此直接開始</a>
+            </div>
+        </div>
+        
+        <!-- 統計卡片 -->
+        <div class="stats-card">
+            <div class="stat-item">
+                <span class="stat-number">347</span>
+                <span class="stat-label">隻毛孩參加</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">12,847</span>
+                <span class="stat-label">累積按讚</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">523</span>
+                <span class="stat-label">LINE 好友</span>
+            </div>
+        </div>
+        
+        <!-- 生成表單 -->
+        <div class="form-card" id="formCard">
+            <div class="welcome-banner">
+                <h3>🎉 歡迎！開始生成您的搞笑照片</h3>
+                <p style="color: #666; margin-top: 10px;">感謝加入 LINE 好友 @902rkfzv！現在就來玩玩看吧</p>
+            </div>
+            
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label>🐕 毛孩的名字</label>
+                    <input type="text" id="petName" placeholder="請輸入毛孩的名字" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>🦴 毛孩品種（選填）</label>
+                    <input type="text" id="petBreed" placeholder="例如：柴犬、法鬥、貴賓">
+                </div>
+                
+                <div class="form-group">
+                    <label>📸 上傳毛孩照片 <span style="color: #EF4444;">*</span></label>
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📷</div>
+                        <div style="font-size: 1.1em; color: #666;">點擊或拖曳照片到這裡</div>
+                        <div style="font-size: 0.9em; color: #999; margin-top: 10px;">支援 JPG、PNG 格式</div>
+                        <input type="file" id="photoInput" accept="image/*" required>
+                    </div>
+                    <div class="preview-container" id="previewContainer">
+                        <img id="previewImage" class="preview-image" alt="預覽">
+                        <br>
+                        <button type="button" class="remove-image" id="removeImage">🗑️ 移除照片</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>🎨 選擇生成風格</label>
+                    <div class="style-options">
+                        <div class="style-option selected" data-style="exaggerated">
+                            <div class="style-emoji">🤪</div>
+                            <div class="style-name">浮誇吃相王</div>
+                            <div class="style-desc">眼睛爆凸、嘴巴超大、流口水</div>
+                        </div>
+                        <div class="style-option" data-style="elegant">
+                            <div class="style-emoji">👑</div>
+                            <div class="style-name">優雅貴族版</div>
+                            <div class="style-desc">IG網美風、粉色系、sparkle特效</div>
+                        </div>
+                        <div class="style-option" data-style="kungfu">
+                            <div class="style-emoji">🥋</div>
+                            <div class="style-name">武林雞霸</div>
+                            <div class="style-desc">復古武俠風、把雞排當寶劍</div>
+                        </div>
+                        <div class="style-option" data-style="surprise">
+                            <div class="style-emoji">🎉</div>
+                            <div class="style-name">雞排爆炸王</div>
+                            <div class="style-desc">彩虹霓虹、滿天飛的雞排</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="generate-btn">🎨 立即生成搞笑照片</button>
+            </form>
+        </div>
+        
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <h2 style="color: #FF6B35;">AI正在生成您的特效照片...</h2>
+            <p style="color: #666; margin-top: 10px;">預計需要 5-10 秒</p>
+        </div>
+        
+        <!-- 結果展示區 -->
+        <div class="result-section" id="resultSection">
+            <h2>🎉 生成成功！您的 4 種風格照片</h2>
+            <div class="result-grid">
+                <div class="result-item">
+                    <img src="https://www.genspark.ai/api/files/s/elrynCzV?cache_control=3600" alt="浮誇吃相王" onclick="window.open(this.src, '_blank')">
+                    <h3>🤪 浮誇吃相王</h3>
+                </div>
+                <div class="result-item">
+                    <img src="https://www.genspark.ai/api/files/s/NLpoejkM?cache_control=3600" alt="優雅貴族版" onclick="window.open(this.src, '_blank')">
+                    <h3>👑 優雅貴族版</h3>
+                </div>
+                <div class="result-item">
+                    <img src="https://www.genspark.ai/api/files/s/Gd9jhdRg?cache_control=3600" alt="武林雞霸" onclick="window.open(this.src, '_blank')">
+                    <h3>🥋 武林雞霸</h3>
+                </div>
+                <div class="result-item">
+                    <img src="https://www.genspark.ai/api/files/s/guOtBzfi?cache_control=3600" alt="雞排爆炸王" onclick="window.open(this.src, '_blank')">
+                    <h3>🎉 雞排爆炸王</h3>
+                </div>
+            </div>
+            
+            <div class="share-section">
+                <h3>💚 分享給朋友，一起來玩！</h3>
+                <div class="share-buttons">
+                    <a href="https://line.me/R/msg/text/?我用「進擊的手撕雞%20AI%20生成器」做出超搞笑的毛孩照片！你也來試試%20👉%20加好友%20@902rkfzv" target="_blank" class="share-btn">📱 分享到 LINE</a>
+                    <button class="share-btn" onclick="alert('長按圖片可儲存到手機！')">📥 儲存照片</button>
+                </div>
+            </div>
+            
+            <button type="button" class="generate-btn" onclick="location.reload()">🔄 再玩一次</button>
+        </div>
+    </div>
+    
+    <script>
+        let selectedFile = null;
+        let selectedStyle = 'exaggerated';
+        
+        function handleLineClick() {
+            document.cookie = "line_clicked=true; max-age=86400";
+            setTimeout(() => {
+                document.getElementById('lineGate').style.display = 'none';
+                document.getElementById('formCard').style.display = 'block';
+                document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
+            }, 3000);
+        }
+        
+        function skipToGenerate() {
+            document.getElementById('lineGate').style.display = 'none';
+            document.getElementById('formCard').style.display = 'block';
+            document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        if (document.cookie.includes('line_clicked=true')) {
+            skipToGenerate();
+        }
+        
+        const uploadArea = document.getElementById('uploadArea');
+        const photoInput = document.getElementById('photoInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+        
+        uploadArea.addEventListener('click', () => photoInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = '#FFE4B5';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.background = '#FFF9F0';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = '#FFF9F0';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) handleFile(files[0]);
+        });
+        
+        photoInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) handleFile(e.target.files[0]);
+        });
+        
+        function handleFile(file) {
+            if (!file.type.match('image.*')) {
+                alert('只支援圖片格式！');
+                return;
+            }
+            
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                uploadArea.style.display = 'none';
+                previewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        document.getElementById('removeImage').addEventListener('click', () => {
+            selectedFile = null;
+            photoInput.value = '';
+            uploadArea.style.display = 'block';
+            previewContainer.style.display = 'none';
+        });
+        
+        document.querySelectorAll('.style-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedStyle = this.getAttribute('data-style');
+            });
+        });
+        
+        document.getElementById('uploadForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (!selectedFile) {
+                alert('請上傳照片！');
+                return;
+            }
+            
+            document.getElementById('formCard').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('resultSection').style.display = 'block';
+                document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
