@@ -1,0 +1,29 @@
+{
+  "name": "haodada-ai-pet-generator",
+  "version": "1.0.0",
+  "description": "豪大大雞霸 AI 寵物照片生成器 - Haodada AI Pet Photo Generator",
+  "main": "api/generate.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "ai",
+    "image-generation",
+    "replicate",
+    "pet",
+    "photo-generator"
+  ],
+  "author": "Haodada",
+  "license": "MIT",
+  "dependencies": {
+    "replicate": "^0.30.0"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
