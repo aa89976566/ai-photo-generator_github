@@ -1,0 +1,31 @@
+{
+  "name": "haodada-ai-pet-generator",
+  "version": "1.0.0",
+  "description": "豪大大雞霸 AI 寵物照片生成器 - Haodada AI Pet Photo Generator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "ai",
+    "image-generation",
+    "replicate",
+    "pet",
+    "photo-generator"
+  ],
+  "author": "Haodada",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "replicate": "^0.30.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

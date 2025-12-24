@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="豪大大雞霸 AI 寵物照片生成器 - 讓您的毛孩享受豪大大的美味！">
+  <title>豪大大雞霸 AI 寵物照片生成器</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- 歡迎頁面 -->
+  <div id="welcome-page" class="page">
+    <div class="welcome-container">
+      <div class="welcome-logo">
+        <h1>🍗 豪大大雞霸</h1>
+        <h2>AI 寵物照片生成器</h2>
+      </div>
+      
+      <div class="welcome-content">
+        <div class="welcome-icon">🐾</div>
+        <p class="welcome-text">
+          讓您的毛孩也享受豪大大的美味！<br>
+          上傳寵物照片，選擇場景，<br>
+          一鍵生成超萌擬人化照片！
+        </p>
+        
+        <div class="line-verification-box">
+          <h3>📱 加入 LINE 官方帳號</h3>
+          <p>加入後即可免費使用 AI 生成器</p>
+          <button id="add-line-btn" class="btn btn-primary btn-large">
+            ➕ 加入 LINE 官方帳號
+          </button>
+          <button id="verified-btn" class="btn btn-secondary btn-large">
+            ✅ 我已加入，開始使用
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生成器頁面 -->
+  <div id="generator-page" class="page">
+    <header class="header">
+      <div class="header-content">
+        <h1>🍗 豪大大雞霸 AI 生成器</h1>
+        <p class="subtitle">讓您的毛孩享受豪大大的美味</p>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- 上傳區域 -->
+      <section id="upload-section" class="section">
+        <h2 class="section-title">📸 步驟 1：上傳寵物照片</h2>
+        <div class="upload-container">
+          <div id="upload-area" class="upload-area">
+            <div class="upload-icon">📷</div>
+            <p class="upload-text">點擊或拖放照片到這裡</p>
+            <p class="upload-hint">支援 JPG、PNG 格式，最大 10MB</p>
+            <input type="file" id="file-input" accept="image/jpeg,image/jpg,image/png" style="display: none;">
+          </div>
+          
+          <div id="preview-area" class="preview-area" style="display: none;">
+            <div class="preview-container">
+              <img id="preview-image" src="" alt="預覽圖片" class="preview-image">
+              <button id="reupload-btn" class="btn btn-secondary btn-small">重新上傳</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 場景選擇區域 -->
+      <section id="scene-section" class="section">
+        <h2 class="section-title">🎨 步驟 2：選擇場景</h2>
+        <div class="scene-grid">
+          <div class="scene-card" data-scene="selfie">
+            <div class="scene-icon">📸</div>
+            <h3>自拍風格</h3>
+            <p>拿著手機自拍</p>
+          </div>
+          
+          <div class="scene-card" data-scene="sofa">
+            <div class="scene-icon">🛋️</div>
+            <h3>沙發時光</h3>
+            <p>悠閒放鬆時刻</p>
+          </div>
+          
+          <div class="scene-card" data-scene="night_market">
+            <div class="scene-icon">🌃</div>
+            <h3>夜市美食</h3>
+            <p>台灣夜市體驗</p>
+          </div>
+          
+          <div class="scene-card" data-scene="party">
+            <div class="scene-icon">🎉</div>
+            <h3>派對同樂</h3>
+            <p>歡樂慶祝時刻</p>
+          </div>
+          
+          <div class="scene-card" data-scene="cafe">
+            <div class="scene-icon">☕</div>
+            <h3>咖啡廳</h3>
+            <p>優雅品嚐時光</p>
+          </div>
+          
+          <div class="scene-card" data-scene="park">
+            <div class="scene-icon">🌳</div>
+            <h3>戶外公園</h3>
+            <p>陽光野餐時光</p>
+          </div>
+        </div>
+        
+        <div class="generate-container">
+          <button id="generate-btn" class="btn btn-primary btn-large" disabled>
+            ✨ 開始生成
+          </button>
+        </div>
+      </section>
+
+      <!-- 載入頁面 -->
+      <section id="loading-section" class="loading-section">
+        <div class="loading-container">
+          <div class="loading-animation">
+            <div class="spinner"></div>
+          </div>
+          <h2 class="loading-title">AI 正在生成中...</h2>
+          <div class="progress-container">
+            <div class="progress-bar-wrapper">
+              <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <p id="progress-text" class="progress-text">0%</p>
+          </div>
+          <p class="loading-tip">正在分析您的寵物照片...</p>
+        </div>
+      </section>
+
+      <!-- 結果頁面 -->
+      <section id="result-section" class="result-section">
+        <div class="result-container">
+          <h2 class="result-title">🎉 生成完成！</h2>
+          <div class="result-image-wrapper">
+            <img id="result-image" src="" alt="生成的圖片" class="result-image">
+          </div>
+          
+          <div class="result-actions">
+            <button id="download-btn" class="btn btn-primary">
+              💾 下載圖片
+            </button>
+            <button id="share-instagram-btn" class="btn btn-social btn-instagram">
+              📷 Instagram
+            </button>
+            <button id="share-threads-btn" class="btn btn-social btn-threads">
+              🧵 Threads
+            </button>
+            <button id="share-line-btn" class="btn btn-social btn-line">
+              💬 LINE
+            </button>
+            <button id="regenerate-btn" class="btn btn-secondary">
+              🔄 重新生成
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2024 豪大大雞霸 AI 生成器 | Powered by Replicate</p>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+
